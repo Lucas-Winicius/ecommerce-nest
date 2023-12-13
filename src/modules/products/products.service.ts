@@ -30,8 +30,21 @@ export class ProductsService {
     return product;
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(id: string, updateProductDto: UpdateProductDto) {
+    try {
+      const updatedProduct = await this.prisma.product.update({
+        where: { id },
+        data: updateProductDto,
+      });
+
+      return updatedProduct;
+    } catch (e) {
+      if (e.code === 'P2025') {
+        throw new NotFoundException('This product not exists');
+      } else {
+        throw e;
+      }
+    }
   }
 
   remove(id: number) {
