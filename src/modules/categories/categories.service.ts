@@ -22,8 +22,12 @@ export class CategoriesService {
     }
   }
 
-  findAll() {
-    return `This action returns all categories`;
+  async findAll() {
+    const categories = await this.prisma.category.findMany({
+      include: { products: true },
+    });
+
+    return categories;
   }
 
   findOne(id: number) {
