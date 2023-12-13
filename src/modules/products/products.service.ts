@@ -47,7 +47,19 @@ export class ProductsService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: string) {
+    try {
+      const deletedProduct = await this.prisma.product.delete({
+        where: { id },
+      });
+
+      return deletedProduct;
+    } catch (e) {
+      if (e.code === 'P2025') {
+        throw new NotFoundException('This product not exists');
+      } else {
+        throw e;
+      }
+    }
   }
 }
