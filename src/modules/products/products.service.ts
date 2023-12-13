@@ -14,8 +14,10 @@ export class ProductsService {
     return product;
   }
 
-  findAll() {
-    return `This action returns all products`;
+  async findAll() {
+    const products = await this.prisma.product.findMany();
+
+    return products;
   }
 
   findOne(id: number) {
