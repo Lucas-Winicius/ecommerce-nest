@@ -57,14 +57,27 @@ export class CategoriesService {
       return updatedCategory;
     } catch (e) {
       if (e.code === 'P2025') {
-        throw new NotFoundException('Category not exists');
+        throw new NotFoundException('This category not exists');
       } else {
         throw e;
       }
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: string) {
+    try {
+      const deletedCategory = await this.prisma.category.delete({
+        where: { id },
+      });
+
+      return deletedCategory;
+    } catch (e) {
+      console.log(e);
+      if (e.code === 'P2025') {
+        throw new NotFoundException('This category not exists');
+      } else {
+        throw e;
+      }
+    }
   }
 }
