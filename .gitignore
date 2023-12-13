@@ -38,4 +38,4 @@ lerna-debug.log*
 .env
 
 # Data
-./prisma/data
+/prisma/data/*

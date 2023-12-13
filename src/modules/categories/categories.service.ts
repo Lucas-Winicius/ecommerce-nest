@@ -47,8 +47,21 @@ export class CategoriesService {
     return category;
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: string, updateCategoryDto: UpdateCategoryDto) {
+    try {
+      const updatedCategory = await this.prisma.category.update({
+        where: { id },
+        data: updateCategoryDto,
+      });
+
+      return updatedCategory;
+    } catch (e) {
+      if (e.code === 'P2025') {
+        throw new NotFoundException('Category not exists');
+      } else {
+        throw e;
+      }
+    }
   }
 
   remove(id: number) {
